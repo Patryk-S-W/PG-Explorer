@@ -10,11 +10,14 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
 import '../pages/home_page.dart';
+import '../pages/login_chat_page.dart';
 
 class Routes {
   static const String homePage = '/';
+  static const String loginChatPage = '/login-chat-page';
   static const all = <String>{
     homePage,
+    loginChatPage,
   };
 }
 
@@ -23,6 +26,7 @@ class Router extends RouterBase {
   List<RouteDef> get routes => _routes;
   final _routes = <RouteDef>[
     RouteDef(Routes.homePage, page: HomePage),
+    RouteDef(Routes.loginChatPage, page: LoginChatPage),
   ];
   @override
   Map<Type, AutoRouteFactory> get pagesMap => _pagesMap;
@@ -33,6 +37,15 @@ class Router extends RouterBase {
       );
       return buildAdaptivePageRoute<dynamic>(
         builder: (context) => HomePage(key: args.key),
+        settings: data,
+      );
+    },
+    LoginChatPage: (data) {
+      final args = data.getArgs<LoginChatPageArguments>(
+        orElse: () => LoginChatPageArguments(),
+      );
+      return buildAdaptivePageRoute<dynamic>(
+        builder: (context) => LoginChatPage(key: args.key),
         settings: data,
       );
     },
@@ -47,4 +60,10 @@ class Router extends RouterBase {
 class HomePageArguments {
   final Key key;
   HomePageArguments({this.key});
+}
+
+/// LoginChatPage arguments holder class
+class LoginChatPageArguments {
+  final Key key;
+  LoginChatPageArguments({this.key});
 }

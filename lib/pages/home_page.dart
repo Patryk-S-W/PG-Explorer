@@ -1,5 +1,8 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
+
+import 'package:flutter_chat/router/router.gr.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
@@ -35,10 +38,10 @@ class _HomePageState extends State<HomePage> {
           ),
           Column(
             children: [
-              new Expanded(
+              Expanded(
                 flex: 3,
                 child: Center(
-                  child: new Container(
+                  child: Container(
                     color: Colors.amber,
                     width: 250,
                     height: 200,
@@ -85,7 +88,9 @@ class _HomePageState extends State<HomePage> {
                       height: 50.0,
                       margin: EdgeInsets.all(10),
                       child: RaisedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          ExtendedNavigator.root.push(Routes.loginChatPage);
+                        },
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10.0),
                         ),
