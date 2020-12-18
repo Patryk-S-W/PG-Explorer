@@ -1,4 +1,6 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_chat/router/router.gr.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class LoginChatPage extends StatefulWidget {
@@ -109,7 +111,13 @@ class _LoginChatPageState extends State<LoginChatPage> {
   }
 
   _openChat() async {
-    print(_usernameController.text);
-    _usernameController.clear();
+    Future.delayed(
+        Duration(milliseconds: 5),
+        () => {
+              ExtendedNavigator.root.push(Routes.chatPage,
+                  arguments:
+                      ChatPageArguments(username: _usernameController.text)),
+              _usernameController.clear()
+            });
   }
 }
