@@ -25,7 +25,7 @@ class MessageOut extends StatelessWidget {
           child: Stack(
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.only(
+                padding: EdgeInsets.only(
                     right: 8.0, left: 8.0, top: 8.0, bottom: 15.0),
                 child: Text(
                   message.message,

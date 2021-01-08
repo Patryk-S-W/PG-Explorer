@@ -34,5 +34,6 @@ class Message {
     data['userID'] = this.userID ?? "";
     data['userName'] = this.userName ?? "";
     data['greeting'] = this.greeting ?? false;
+    return data;
   }
 }
