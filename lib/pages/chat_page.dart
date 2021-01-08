@@ -1,5 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_chat/models/message.dart';
+import 'package:flutter_chat/widgets/message_in.dart';
+import 'package:flutter_chat/widgets/message_out.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ChatPage extends StatefulWidget {
@@ -31,7 +34,13 @@ class _ChatPageState extends State<ChatPage> {
             controller: _scrollController,
             itemCount: 10,
             itemBuilder: (BuildContext context, int index) {
-              return Text('123');
+              return index % 2 == 0
+                  ? MessageOut(
+                      message: Message(),
+                    )
+                  : MessageIn(
+                      message: Message(),
+                    );
             },
           ),
         ),
