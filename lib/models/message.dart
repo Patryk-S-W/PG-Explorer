@@ -9,9 +9,9 @@ class Message {
 
   Message({
     this.message = "",
+    this.time = "N/A",
     this.userID = "",
     this.userName = "",
-    this.time = "N/A",
     this.greeting = false,
   });
 

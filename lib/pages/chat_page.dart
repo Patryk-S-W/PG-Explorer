@@ -1,8 +1,13 @@
+import 'dart:convert';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_chat/constants.dart';
 import 'package:flutter_chat/models/message.dart';
 import 'package:flutter_chat/widgets/message_in.dart';
 import 'package:flutter_chat/widgets/message_out.dart';
+import 'package:flutter_socket_io/flutter_socket_io.dart';
+import 'package:flutter_socket_io/socket_io_manager.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ChatPage extends StatefulWidget {
@@ -20,6 +25,39 @@ class ChatPage extends StatefulWidget {
 class _ChatPageState extends State<ChatPage> {
   TextEditingController _textController;
   ScrollController _scrollController;
+  SocketIO _socketIO;
+  String _time;
+  String _userid;
+
+  @override
+  void initState() {
+    _textController = TextEditingController();
+    _scrollController = ScrollController();
+    _socketIO = SocketIOManager().createSocketIO(SERVER_URL, '/',
+        socketStatusCallback: (data) => {print('SOCKET STATUS ==> $data')});
+
+    _socketIO.init();
+
+    _socketIO.subscribe('time', (data) {
+      this.setState(() => _time = data);
+      print(data);
+    });
+
+    try {
+      _socketIO.connect();
+    } catch (err) {
+      print('Error $err');
+    }
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _socketIO.disconnect();
+    _socketIO.destroy();
+    super.dispose();
+  }
 
   Widget messageArea() {
     return Flexible(
@@ -34,11 +72,11 @@ class _ChatPageState extends State<ChatPage> {
             controller: _scrollController,
             itemCount: 10,
             itemBuilder: (BuildContext context, int index) {
-              return index % 2 == 0
-                  ? MessageOut(
+              return index % 3 == 0
+                  ? MessageIn(
                       message: Message(),
                     )
-                  : MessageIn(
+                  : MessageOut(
                       message: Message(),
                     );
             },

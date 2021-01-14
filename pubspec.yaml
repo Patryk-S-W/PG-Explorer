@@ -29,6 +29,7 @@ dependencies:
   cupertino_icons: ^1.0.0
   auto_route: ^0.6.9
   google_fonts: ^1.1.2
+  flutter_socket_io: ^0.6.0
 
 dev_dependencies:
   flutter_test:
