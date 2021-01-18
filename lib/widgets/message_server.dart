@@ -16,16 +16,23 @@ class MessageServer extends StatelessWidget {
         padding: EdgeInsets.all(9.5),
         child: Container(
           child: message.greeting
-              ? Text(
-                  message.message + ' user_' + message.userID,
-                  style: TextStyle(
-                      fontSize: 10, color: Colors.white.withOpacity(0.5)),
+              ? Column(
+                  children: [
+                    Text(
+                      message.username + ' ' + message.message,
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 11,
+                          color: Colors.white.withOpacity(0.7)),
+                    ),
+                    Text(
+                      '[ ${message.userID} ]',
+                      style: TextStyle(
+                          fontSize: 9, color: Colors.white.withOpacity(0.5)),
+                    ),
+                  ],
                 )
-              : Text(
-                  message.message,
-                  style: TextStyle(
-                      fontSize: 10, color: Colors.white.withOpacity(0.5)),
-                ),
+              : Container(),
         ),
       ),
     );

@@ -1,11 +1,12 @@
 import 'dart:convert';
 
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter_chat/constants.dart';
 import 'package:flutter_chat/models/message.dart';
 import 'package:flutter_chat/widgets/message_in.dart';
 import 'package:flutter_chat/widgets/message_out.dart';
+import 'package:flutter_chat/widgets/message_server.dart';
 import 'package:flutter_socket_io/flutter_socket_io.dart';
 import 'package:flutter_socket_io/socket_io_manager.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -28,19 +29,27 @@ class _ChatPageState extends State<ChatPage> {
   SocketIO _socketIO;
   String _time;
   String _userid;
+  String _connection_status;
+  List<Message> _messages;
 
   @override
   void initState() {
+    _messages = List<Message>();
     _textController = TextEditingController();
     _scrollController = ScrollController();
-    _socketIO = SocketIOManager().createSocketIO(SERVER_URL, '/',
+    _socketIO = SocketIOManager().createSocketIO(SERVER_URL, SERVER_NAMESPACE,
         socketStatusCallback: (data) => {print('SOCKET STATUS ==> $data')});
 
     _socketIO.init();
 
+    _socketIO.subscribe('greeting', (jsonData) {
+      Message data = Message.fromJson(json.decode(jsonData.toString()));
+      this.setState(() => _messages.add(data));
+      scrollDown();
+    });
+
     _socketIO.subscribe('time', (data) {
       this.setState(() => _time = data);
-      print(data);
     });
 
     try {
@@ -48,6 +57,16 @@ class _ChatPageState extends State<ChatPage> {
     } catch (err) {
       print('Error $err');
     }
+
+    _socketIO.subscribe('userID', (data) {
+      this.setState(() => _userid = data);
+      _socketIO.unSubscribe('userID');
+    });
+
+    Future.delayed(
+        Duration(milliseconds: 10),
+        () => _socketIO.sendMessage(
+            'test', json.encode({"username": widget.username})));
 
     super.initState();
   }
@@ -57,6 +76,14 @@ class _ChatPageState extends State<ChatPage> {
     _socketIO.disconnect();
     _socketIO.destroy();
     super.dispose();
+  }
+
+  void scrollDown() {
+    _scrollController.animateTo(
+      _scrollController.position.maxScrollExtent,
+      duration: Duration(milliseconds: 600),
+      curve: Curves.ease,
+    );
   }
 
   Widget messageArea() {
@@ -70,15 +97,21 @@ class _ChatPageState extends State<ChatPage> {
           width: MediaQuery.of(context).size.width,
           child: ListView.builder(
             controller: _scrollController,
-            itemCount: 10,
+            itemCount: _messages.length,
             itemBuilder: (BuildContext context, int index) {
-              return index % 3 == 0
-                  ? MessageIn(
-                      message: Message(),
-                    )
-                  : MessageOut(
-                      message: Message(),
-                    );
+              return _messages.length <= 0
+                  ? Container()
+                  : _messages[index].greeting
+                      ? MessageServer(
+                          message: _messages[index],
+                        )
+                      : _messages[index].isUserMessage(_userid)
+                          ? MessageIn(
+                              message: Message(),
+                            )
+                          : MessageOut(
+                              message: Message(),
+                            );
             },
           ),
         ),
