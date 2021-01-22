@@ -11,39 +11,47 @@ class MessageOut extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        child: Padding(
-      padding:
-          const EdgeInsets.only(right: 8.0, left: 75.0, top: 8.0, bottom: 8.0),
-      child: ClipRRect(
-        borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(15),
-            bottomRight: Radius.circular(0),
-            topLeft: Radius.circular(15),
-            topRight: Radius.circular(15)),
-        child: Container(
-          color: Color.fromRGBO(147, 112, 219, 0.7),
-          child: Stack(
-            children: <Widget>[
-              Padding(
-                padding: EdgeInsets.only(
-                    right: 8.0, left: 8.0, top: 8.0, bottom: 15.0),
+      padding: EdgeInsets.all(8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Flex(
+            direction: Axis.horizontal,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Container(
+                padding: EdgeInsets.all(8.0),
+                constraints: BoxConstraints(
+                  maxWidth: MediaQuery.of(context).size.width * 0.7,
+                ),
+                decoration: BoxDecoration(
+                    color: Color.fromRGBO(147, 112, 219, 0.7),
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(15.0),
+                      bottomRight: Radius.circular(0.0),
+                      topLeft: Radius.circular(15.0),
+                      topRight: Radius.circular(15.0),
+                    )),
                 child: Text(
                   message.message,
+                  style: TextStyle(color: Colors.white),
                 ),
               ),
-              Positioned(
-                bottom: 1,
-                right: 10,
-                child: Text(
-                  message.time,
-                  style: TextStyle(
-                      fontSize: 10, color: Colors.black.withOpacity(0.6)),
-                ),
-              )
             ],
           ),
-        ),
+          Padding(
+            padding: EdgeInsets.only(top: 2.0),
+            child: Text(
+              message.time,
+              textAlign: TextAlign.left,
+              style: TextStyle(
+                fontSize: 10,
+                color: Colors.white.withOpacity(0.6),
+              ),
+            ),
+          )
+        ],
       ),
-    ));
+    );
   }
 }
