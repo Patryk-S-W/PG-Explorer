@@ -48,6 +48,12 @@ class _ChatPageState extends State<ChatPage> {
       scrollDown();
     });
 
+    _socketIO.subscribe('receive_message', (jsonData) {
+      Message data = Message.fromJson(json.decode(jsonData.toString()));
+      this.setState(() => _messages.add(data));
+      scrollDown();
+    });
+
     _socketIO.subscribe('time', (data) {
       this.setState(() => _time = data);
     });
@@ -106,11 +112,11 @@ class _ChatPageState extends State<ChatPage> {
                           message: _messages[index],
                         )
                       : _messages[index].isUserMessage(_userid)
-                          ? MessageIn(
-                              message: Message(),
+                          ? MessageOut(
+                              message: _messages[index],
                             )
-                          : MessageOut(
-                              message: Message(),
+                          : MessageIn(
+                              message: _messages[index],
                             );
             },
           ),
@@ -131,7 +137,22 @@ class _ChatPageState extends State<ChatPage> {
             decoration: InputDecoration(
               suffixIcon: IconButton(
                 icon: Icon(Icons.send),
-                onPressed: () async {},
+                onPressed: () async {
+                  if (_textController.text.isNotEmpty) {
+                    Message msg = Message(
+                        message: _textController.text,
+                        time: _time,
+                        userID: _userid,
+                        username: widget.username);
+
+                    _socketIO.sendMessage(
+                        'send_message', json.encode(msg.toJson()));
+                    this.setState(() => _messages.add(msg));
+                    Future.delayed(Duration(microseconds: 1),
+                        () => _textController.clear());
+                    scrollDown();
+                  }
+                },
               ),
               border: InputBorder.none,
               hintText: 'Send a message...',
