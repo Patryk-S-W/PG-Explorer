@@ -15,7 +15,7 @@ class MessageServer extends StatelessWidget {
       child: Padding(
         padding: EdgeInsets.all(9.5),
         child: Container(
-          child: message.greeting
+          child: message.isGreeting
               ? Column(
                   children: [
                     Text(
@@ -26,7 +26,7 @@ class MessageServer extends StatelessWidget {
                           color: Colors.white.withOpacity(0.7)),
                     ),
                     Text(
-                      '[ ${message.userID} ]',
+                      '--${message.userID}--',
                       style: TextStyle(
                           fontSize: 9, color: Colors.white.withOpacity(0.5)),
                     ),
