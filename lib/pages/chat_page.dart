@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -10,6 +11,7 @@ import 'package:flutter_chat/widgets/message_server.dart';
 import 'package:flutter_socket_io/flutter_socket_io.dart';
 import 'package:flutter_socket_io/socket_io_manager.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ChatPage extends StatefulWidget {
   final String username;
@@ -107,7 +109,7 @@ class _ChatPageState extends State<ChatPage> {
             itemBuilder: (BuildContext context, int index) {
               return _messages.length <= 0
                   ? Container()
-                  : _messages[index].greeting
+                  : _messages[index].isGreeting
                       ? MessageServer(
                           message: _messages[index],
                         )
@@ -135,15 +137,40 @@ class _ChatPageState extends State<ChatPage> {
             maxLines: 20,
             controller: _textController,
             decoration: InputDecoration(
+              prefixIcon: IconButton(
+                icon: Icon(Icons.image),
+                onPressed: () async {
+                  File image = await ImagePicker.pickImage(
+                    source: ImageSource.gallery,
+                    imageQuality: 50,
+                  );
+                  List<int> imageBytes = image.readAsBytesSync();
+                  base64Encode(imageBytes);
+
+                  if (image != null) {
+                    Message msg = Message(
+                      image: imageBytes,
+                      time: _time,
+                      userID: _userid,
+                      username: widget.username,
+                    );
+                    _socketIO.sendMessage(
+                        'send_message', json.encode(msg.toJson()));
+                    this.setState(() => _messages.add(msg));
+                    scrollDown();
+                  }
+                },
+              ),
               suffixIcon: IconButton(
                 icon: Icon(Icons.send),
                 onPressed: () async {
                   if (_textController.text.isNotEmpty) {
                     Message msg = Message(
-                        message: _textController.text,
-                        time: _time,
-                        userID: _userid,
-                        username: widget.username);
+                      message: _textController.text,
+                      time: _time,
+                      userID: _userid,
+                      username: widget.username,
+                    );
 
                     _socketIO.sendMessage(
                         'send_message', json.encode(msg.toJson()));

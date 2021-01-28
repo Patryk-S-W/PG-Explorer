@@ -30,6 +30,7 @@ dependencies:
   auto_route: ^0.6.9
   google_fonts: ^1.1.2
   flutter_socket_io: ^0.6.0
+  image_picker: ^0.6.7+22
 
 dev_dependencies:
   flutter_test:

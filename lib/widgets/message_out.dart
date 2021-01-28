@@ -25,17 +25,31 @@ class MessageOut extends StatelessWidget {
                   maxWidth: MediaQuery.of(context).size.width * 0.7,
                 ),
                 decoration: BoxDecoration(
-                    color: Color.fromRGBO(147, 112, 219, 0.7),
-                    borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(15.0),
-                      bottomRight: Radius.circular(0.0),
-                      topLeft: Radius.circular(15.0),
-                      topRight: Radius.circular(15.0),
-                    )),
-                child: Text(
-                  message.message,
-                  style: TextStyle(color: Colors.white),
+                  color: Color.fromRGBO(147, 112, 219, 0.7),
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(15.0),
+                    bottomRight: Radius.circular(0.0),
+                    topLeft: Radius.circular(15.0),
+                    topRight: Radius.circular(15.0),
+                  ),
                 ),
+                child: message.isImage()
+                    ? ClipRRect(
+                        borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(15.0),
+                          bottomRight: Radius.circular(0.0),
+                          topLeft: Radius.circular(15.0),
+                          topRight: Radius.circular(15.0),
+                        ),
+                        child: Image.memory(
+                          message.image,
+                          fit: BoxFit.scaleDown,
+                        ),
+                      )
+                    : Text(
+                        message.message,
+                        style: TextStyle(color: Colors.white),
+                      ),
               ),
             ],
           ),

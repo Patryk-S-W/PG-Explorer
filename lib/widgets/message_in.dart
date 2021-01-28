@@ -17,7 +17,7 @@ class MessageIn extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: EdgeInsets.only(left: 8.0),
+            padding: EdgeInsets.only(left: 8.0, bottom: 2.0),
             child: Row(
               children: [
                 Text(
@@ -58,10 +58,23 @@ class MessageIn extends StatelessWidget {
                       topLeft: Radius.circular(15.0),
                       topRight: Radius.circular(15.0),
                     )),
-                child: Text(
-                  message.message,
-                  style: TextStyle(color: Colors.white),
-                ),
+                child: message.isImage()
+                    ? ClipRRect(
+                        borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(0.0),
+                          bottomRight: Radius.circular(15.0),
+                          topLeft: Radius.circular(15.0),
+                          topRight: Radius.circular(15.0),
+                        ),
+                        child: Image.memory(
+                          message.image,
+                          fit: BoxFit.scaleDown,
+                        ),
+                      )
+                    : Text(
+                        message.message,
+                        style: TextStyle(color: Colors.white),
+                      ),
               ),
             ],
           ),
