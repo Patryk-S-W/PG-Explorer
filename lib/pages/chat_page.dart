@@ -137,29 +137,59 @@ class _ChatPageState extends State<ChatPage> {
             maxLines: 20,
             controller: _textController,
             decoration: InputDecoration(
-              prefixIcon: IconButton(
-                icon: Icon(Icons.image),
-                onPressed: () async {
-                  File image = await ImagePicker.pickImage(
-                    source: ImageSource.gallery,
-                    imageQuality: 50,
-                  );
-                  List<int> imageBytes = image.readAsBytesSync();
-                  base64Encode(imageBytes);
+              prefixIcon: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.camera_alt),
+                    onPressed: () async {
+                      FocusScope.of(context).unfocus();
+                      File image = await ImagePicker.pickImage(
+                        source: ImageSource.camera,
+                      );
+                      List<int> imageBytes = image.readAsBytesSync();
+                      base64Encode(imageBytes);
 
-                  if (image != null) {
-                    Message msg = Message(
-                      image: imageBytes,
-                      time: _time,
-                      userID: _userid,
-                      username: widget.username,
-                    );
-                    _socketIO.sendMessage(
-                        'send_message', json.encode(msg.toJson()));
-                    this.setState(() => _messages.add(msg));
-                    scrollDown();
-                  }
-                },
+                      if (image != null) {
+                        Message msg = Message(
+                          image: imageBytes,
+                          time: _time,
+                          userID: _userid,
+                          username: widget.username,
+                        );
+                        _socketIO.sendMessage(
+                            'send_message', json.encode(msg.toJson()));
+                        this.setState(() => _messages.add(msg));
+                        scrollDown();
+                      }
+                    },
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.image),
+                    onPressed: () async {
+                      File image = await ImagePicker.pickImage(
+                        source: ImageSource.gallery,
+                        imageQuality: 50,
+                      );
+                      List<int> imageBytes = image.readAsBytesSync();
+                      base64Encode(imageBytes);
+
+                      if (image != null) {
+                        Message msg = Message(
+                          image: imageBytes,
+                          time: _time,
+                          userID: _userid,
+                          username: widget.username,
+                        );
+                        _socketIO.sendMessage(
+                            'send_message', json.encode(msg.toJson()));
+                        this.setState(() => _messages.add(msg));
+                        scrollDown();
+                      }
+                    },
+                  ),
+                ],
               ),
               suffixIcon: IconButton(
                 icon: Icon(Icons.send),
