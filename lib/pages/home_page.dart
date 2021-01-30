@@ -10,7 +10,24 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage>
+    with SingleTickerProviderStateMixin {
+  AnimationController _animationController;
+  Animation _animation;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    _animationController =
+        AnimationController(vsync: this, duration: Duration(seconds: 2));
+    _animationController.repeat(reverse: true);
+    _animation = Tween(begin: 1.0, end: 5.0).animate(_animationController)
+      ..addListener(() {
+        setState(() {});
+      });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     double _height = MediaQuery.of(context).size.height;
@@ -29,10 +46,9 @@ class _HomePageState extends State<HomePage> {
           ),
           ClipPath(
             child: Container(
-              width: _width,
-              height: _height,
-              color: Colors.white12,
-            ),
+                width: _width,
+                height: _height,
+                color: Colors.white.withOpacity(0.85)),
             clipper: BottomTriangle(),
           ),
           Column(
@@ -54,6 +70,15 @@ class _HomePageState extends State<HomePage> {
                     Container(
                       height: 50.0,
                       margin: EdgeInsets.all(10.0),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10.0),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.redAccent,
+                              blurRadius: _animation.value,
+                              spreadRadius: _animation.value,
+                            )
+                          ]),
                       child: RaisedButton(
                         onPressed: () {},
                         shape: RoundedRectangleBorder(
