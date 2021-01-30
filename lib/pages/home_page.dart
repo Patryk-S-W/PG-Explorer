@@ -1,9 +1,7 @@
-import 'package:auto_route/auto_route.dart';
-import 'package:flutter/material.dart';
 import 'dart:math' as math;
-
+import 'package:flutter/material.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter_chat/router/router.gr.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
@@ -43,56 +41,8 @@ class _HomePageState extends State<HomePage> {
                 flex: 3,
                 child: Center(
                   child: Container(
-                    width: 250,
-                    height: 200,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Unity',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 45,
-                              fontWeight: FontWeight.w700),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 10),
-                          child: Row(
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 9),
-                                child: Text(
-                                  'Syntax',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 40,
-                                      fontWeight: FontWeight.w700),
-                                ),
-                              ),
-                              Text(
-                                'Error',
-                                style: TextStyle(
-                                    color: Colors.red,
-                                    fontSize: 40,
-                                    fontWeight: FontWeight.w700),
-                              )
-                            ],
-                          ),
-                        ),
-                        Text(
-                          'at line 232',
-                          style: GoogleFonts.neucha(
-                            textStyle: TextStyle(
-                              color: Colors.white,
-                              fontSize: 25,
-                              fontWeight: FontWeight.w300,
-                              fontStyle: FontStyle.italic,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                    width: 300,
+                    child: Image(image: AssetImage('assets/images/logo.png')),
                   ),
                 ),
               ),
