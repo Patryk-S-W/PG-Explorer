@@ -1,7 +1,13 @@
+import 'dart:async';
 import 'dart:math' as math;
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_chat/router/router.gr.dart';
+import 'package:flutter_chat/widgets/custom_alert_dialog.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
@@ -14,10 +20,65 @@ class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
   AnimationController _animationController;
   Animation _animation;
+  bool isAlertboxOpened;
+
+  void checkConnectivity() async {
+    var connectivityResult = Provider.of<ConnectivityResult>(context);
+    var conn = getConnectionValue(connectivityResult);
+
+    Future.delayed(Duration(milliseconds: 10), () {
+      if (!isAlertboxOpened && conn == 'None')
+        SchedulerBinding.instance.addPostFrameCallback((_) {
+          if (!isAlertboxOpened) _showAlert(context);
+        });
+      else if (isAlertboxOpened && (conn == 'Mobile' || conn == 'Wi-Fi'))
+        SchedulerBinding.instance.addPostFrameCallback((_) {
+          if (isAlertboxOpened) {
+            setState(() => isAlertboxOpened = false);
+            Navigator.of(context).pop();
+          }
+        });
+    });
+  }
+
+  String getConnectionValue(var connectivityResult) {
+    String status = '';
+    switch (connectivityResult) {
+      case ConnectivityResult.mobile:
+        status = 'Mobile';
+        break;
+      case ConnectivityResult.wifi:
+        status = 'Wi-Fi';
+        break;
+      case ConnectivityResult.none:
+        status = 'None';
+        break;
+      default:
+        status = 'None';
+        break;
+    }
+    return status;
+  }
+
+  void _showAlert(BuildContext context) async {
+    setState(() => isAlertboxOpened = true);
+    return showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => CustomAlertDialog(
+        title: "No internet connection",
+        contentImage: SvgPicture.asset(
+          'assets/images/disconnected.svg',
+          color: Colors.red,
+        ),
+        contentText: "Please check your internet connection.",
+      ),
+    );
+  }
 
   @override
   void initState() {
-    // TODO: implement initState
+    isAlertboxOpened = false;
     _animationController =
         AnimationController(vsync: this, duration: Duration(seconds: 2));
     _animationController.repeat(reverse: true);
@@ -30,8 +91,11 @@ class _HomePageState extends State<HomePage>
 
   @override
   Widget build(BuildContext context) {
+    checkConnectivity();
+
     double _height = MediaQuery.of(context).size.height;
     double _width = MediaQuery.of(context).size.width;
+
     return Scaffold(
       body: Stack(
         alignment: Alignment.center,
@@ -80,7 +144,9 @@ class _HomePageState extends State<HomePage>
                             )
                           ]),
                       child: RaisedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          // todo
+                        },
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.0)),
                         padding: EdgeInsets.all(0.0),
@@ -179,4 +245,10 @@ class BottomTriangle extends CustomClipper<Path> {
 
   @override
   bool shouldReclip(CustomClipper<Path> oldClipper) => false;
+}
+
+@override
+Widget build(BuildContext context) {
+  // TODO: implement build
+  throw UnimplementedError();
 }
