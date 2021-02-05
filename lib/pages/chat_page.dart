@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'dart:convert';
 
@@ -33,18 +34,23 @@ class _ChatPageState extends State<ChatPage> {
   String _userid;
   String _connection_status;
   List<Message> _messages;
+  Timer timer;
 
   @override
   void initState() {
     _messages = List<Message>();
     _textController = TextEditingController();
     _scrollController = ScrollController();
-    _socketIO = SocketIOManager().createSocketIO(SERVER_URL, SERVER_NAMESPACE,
-        socketStatusCallback: (data) => {print('SOCKET STATUS ==> $data')});
+    _socketIO =
+        SocketIOManager().createSocketIO(SERVER_URL_HTTPS, SERVER_NAMESPACE,
+            socketStatusCallback: (data) => {
+                  print('SOCKET STATUS ==> $data'),
+                });
 
     _socketIO.init();
 
     _socketIO.subscribe('greeting', (jsonData) {
+      print('==> $jsonData');
       Message data = Message.fromJson(json.decode(jsonData.toString()));
       this.setState(() => _messages.add(data));
       scrollDown();
@@ -60,22 +66,27 @@ class _ChatPageState extends State<ChatPage> {
       this.setState(() => _time = data);
     });
 
-    try {
-      _socketIO.connect();
-    } catch (err) {
-      print('Error $err');
-    }
+    _socketIO.connect();
 
-    _socketIO.subscribe('userID', (data) {
-      this.setState(() => _userid = data);
-      _socketIO.unSubscribe('userID');
-    });
+    Future.delayed(
+        Duration(milliseconds: 5),
+        () => _socketIO.subscribe('userID', (data) {
+              this.setState(() => _userid = data);
+              _socketIO.unSubscribe('userID');
+            }));
 
     Future.delayed(
         Duration(milliseconds: 10),
         () => _socketIO.sendMessage(
             'test', json.encode({"username": widget.username})));
 
+    timer = Timer.periodic(
+        Duration(seconds: 45),
+        (Timer t) => {
+              _messages.length > 0
+                  ? setState(() => _messages.removeAt(0))
+                  : null,
+            });
     super.initState();
   }
 
@@ -83,6 +94,8 @@ class _ChatPageState extends State<ChatPage> {
   void dispose() {
     _socketIO.disconnect();
     _socketIO.destroy();
+    _textController.dispose();
+    timer?.cancel();
     super.dispose();
   }
 
@@ -239,7 +252,13 @@ class _ChatPageState extends State<ChatPage> {
           leading: IconButton(
             icon: Icon(Icons.arrow_back_ios),
             onPressed: () {
-              Future.delayed(Duration.zero, () => ExtendedNavigator.root.pop());
+              print('==> $_connection_status 1');
+              _socketIO.unSubscribesAll();
+              print('==> $_connection_status 13');
+              _socketIO.disconnect();
+              print('==> $_connection_status 132');
+              Future.delayed(Duration(milliseconds: 1),
+                  () => ExtendedNavigator.root.pop());
             },
           ),
         ),
