@@ -1,0 +1,13 @@
+{
+    "PLAY": "GRAJ",
+    "CHAT": "CZAT",
+    "JOIN": "DOŁĄCZ",
+    "username": "nazwa użytkownika",
+    "Enter_username": "Podaj nazwę użytkownika",
+    "Send_a_message": "Wyślij wiadomość...",
+    "No_internet_connection": "Brak połączenia z internetem",
+    "Please_check_your_internet_connection": "Sprawdź połczenie z internetem.",
+    "No_internet_connectivity": "Brak łączności z Internetem",
+    "Polish": "Polski",
+    "English": "Angielski"
+}

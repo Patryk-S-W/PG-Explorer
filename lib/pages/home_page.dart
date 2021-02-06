@@ -4,7 +4,10 @@ import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter_chat/providers/app_language.dart';
+
 import 'package:flutter_chat/router/router.gr.dart';
+import 'package:flutter_chat/services/app_localizations.dart';
 import 'package:flutter_chat/widgets/custom_alert_dialog.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
@@ -66,12 +69,13 @@ class _HomePageState extends State<HomePage>
       context: context,
       barrierDismissible: false,
       builder: (context) => CustomAlertDialog(
-        title: "No internet connection",
+        title: AppLocalizations.of(context).translate("No_internet_connection"),
         contentImage: SvgPicture.asset(
           'assets/images/disconnected.svg',
           color: Colors.red,
         ),
-        contentText: "Please check your internet connection.",
+        contentText: AppLocalizations.of(context)
+            .translate("Please_check_your_internet_connection"),
       ),
     );
   }
@@ -92,6 +96,7 @@ class _HomePageState extends State<HomePage>
   @override
   Widget build(BuildContext context) {
     checkConnectivity();
+    var appLanguage = Provider.of<AppLanguage>(context);
 
     double _height = MediaQuery.of(context).size.height;
     double _width = MediaQuery.of(context).size.width;
@@ -165,7 +170,7 @@ class _HomePageState extends State<HomePage>
                                 maxWidth: 300.0, minHeight: 50.0),
                             alignment: Alignment.center,
                             child: Text(
-                              "PLAY",
+                              AppLocalizations.of(context).translate('PLAY'),
                               textAlign: TextAlign.center,
                               style: TextStyle(color: Colors.white),
                             ),
@@ -199,7 +204,7 @@ class _HomePageState extends State<HomePage>
                                 maxWidth: 300.0, minHeight: 50.0),
                             alignment: Alignment.center,
                             child: Text(
-                              "CHAT",
+                              AppLocalizations.of(context).translate('CHAT'),
                               textAlign: TextAlign.center,
                               style: TextStyle(color: Colors.white),
                             ),
@@ -212,6 +217,32 @@ class _HomePageState extends State<HomePage>
               ),
             ],
           ),
+          Align(
+            alignment: Alignment.bottomRight,
+            child: PopupMenuButton<String>(
+              icon: Icon(Icons.translate_outlined, color: Colors.black),
+              onSelected: (String value) {
+                switch (value) {
+                  case 'English':
+                    appLanguage.changeLanguage(Locale("en"));
+                    break;
+
+                  case 'Polish':
+                    appLanguage.changeLanguage(Locale("pl"));
+                    break;
+                }
+              },
+              itemBuilder: (BuildContext context) {
+                return ['English', 'Polish']
+                    .map((String choice) => PopupMenuItem<String>(
+                          value: choice,
+                          child: Text(
+                              AppLocalizations.of(context).translate(choice)),
+                        ))
+                    .toList();
+              },
+            ),
+          )
         ],
       ),
     );
@@ -245,10 +276,4 @@ class BottomTriangle extends CustomClipper<Path> {
 
   @override
   bool shouldReclip(CustomClipper<Path> oldClipper) => false;
-}
-
-@override
-Widget build(BuildContext context) {
-  // TODO: implement build
-  throw UnimplementedError();
 }

@@ -4,6 +4,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat/constants.dart';
 import 'package:flutter_chat/router/router.gr.dart';
+import 'package:flutter_chat/services/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
@@ -86,9 +87,13 @@ class _LoginChatPageState extends State<LoginChatPage> {
                       textAlign: TextAlign.center,
                       style: TextStyle(color: Colors.black),
                       decoration: InputDecoration(
-                        hintText: 'username',
+                        hintText:
+                            AppLocalizations.of(context).translate('username'),
                         hintStyle: TextStyle(color: Colors.grey),
-                        errorText: _validate ? null : 'Enter username',
+                        errorText: _validate
+                            ? null
+                            : AppLocalizations.of(context)
+                                .translate('Enter_username'),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.all(
                             Radius.circular(5.0),
@@ -107,7 +112,7 @@ class _LoginChatPageState extends State<LoginChatPage> {
                       child: OutlineButton(
                           borderSide: BorderSide(color: Colors.white),
                           child: Text(
-                            'JOIN',
+                            AppLocalizations.of(context).translate('JOIN'),
                             style: TextStyle(fontWeight: FontWeight.w400),
                           ),
                           onPressed: () {
@@ -137,14 +142,14 @@ class _LoginChatPageState extends State<LoginChatPage> {
     if (_validation()) {
       try {
         await InternetAddress.lookup(SERVER_URL);
-      } on SocketException catch (err) {
-        print('==> $err');
+      } on SocketException catch (_) {
         showTopSnackBar(
           context,
           Padding(
               padding: EdgeInsets.only(top: 55.0),
               child: CustomSnackBar.error(
-                message: "No internet connectivity",
+                message: AppLocalizations.of(context)
+                    .translate("No_internet_connectivity"),
               )),
         );
         return;

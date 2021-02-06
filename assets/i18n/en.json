@@ -1,0 +1,13 @@
+{
+  "PLAY": "PLAY",
+  "CHAT": "CHAT",
+  "JOIN": "JOIN",
+  "username": "username",
+  "Enter_username": "Enter username",
+  "Send_a_message": "Send a message...",
+  "No_internet_connection": "No internet connection",
+  "Please_check_your_internet_connection": "Please check your internet connection.",
+  "No_internet_connectivity": "No internet connectivity",
+  "Polish": "Polish",
+  "English": "English"
+}
