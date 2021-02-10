@@ -1,11 +1,16 @@
 import 'dart:io';
 
 import 'package:auto_route/auto_route.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_chat/constants.dart';
 import 'package:flutter_chat/router/router.gr.dart';
 import 'package:flutter_chat/services/app_localizations.dart';
+import 'package:flutter_chat/widgets/custom_alert_dialog.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 
@@ -19,9 +24,63 @@ class LoginChatPage extends StatefulWidget {
 class _LoginChatPageState extends State<LoginChatPage> {
   TextEditingController _usernameController;
   bool _validate = true;
+  bool isAlertboxOpened;
+
+  void checkConnectivity() async {
+    var connectivityResult = Provider.of<ConnectivityResult>(context);
+    var conn = getConnectionValue(connectivityResult);
+    if (!isAlertboxOpened && conn == 'None')
+      SchedulerBinding.instance.addPostFrameCallback((_) {
+        if (!isAlertboxOpened) _showAlert(context);
+      });
+    else if (isAlertboxOpened && (conn == 'Mobile' || conn == 'Wi-Fi'))
+      SchedulerBinding.instance.addPostFrameCallback((_) {
+        if (isAlertboxOpened) {
+          setState(() => isAlertboxOpened = false);
+          Navigator.of(context).pop();
+        }
+      });
+  }
+
+  String getConnectionValue(var connectivityResult) {
+    String status = '';
+    switch (connectivityResult) {
+      case ConnectivityResult.mobile:
+        status = 'Mobile';
+        break;
+      case ConnectivityResult.wifi:
+        status = 'Wi-Fi';
+        break;
+      case ConnectivityResult.none:
+        status = 'None';
+        break;
+      default:
+        status = 'None';
+        break;
+    }
+    return status;
+  }
+
+  void _showAlert(BuildContext context) async {
+    setState(() => isAlertboxOpened = true);
+    return showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => CustomAlertDialog(
+        title: AppLocalizations.of(context).translate("No_internet_connection"),
+        contentImage: SvgPicture.asset(
+          'assets/images/disconnected.svg',
+          color: Colors.red,
+        ),
+        contentText: AppLocalizations.of(context)
+            .translate("Please_check_your_internet_connection"),
+      ),
+    );
+  }
 
   @override
   void initState() {
+    isAlertboxOpened = false;
     _usernameController = TextEditingController();
     super.initState();
   }
@@ -34,6 +93,7 @@ class _LoginChatPageState extends State<LoginChatPage> {
 
   @override
   Widget build(BuildContext context) {
+    checkConnectivity();
     return Scaffold(
       appBar: AppBar(
         title: Column(
