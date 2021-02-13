@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+
 import 'package:flutter_chat/models/message.dart';
+
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class MessageOut extends StatelessWidget {
   final Message message;
@@ -11,7 +14,7 @@ class MessageOut extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(8.0),
+      padding: EdgeInsets.all(7.0.r),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
@@ -20,9 +23,9 @@ class MessageOut extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Container(
-                padding: EdgeInsets.all(8.0),
+                padding: EdgeInsets.all(7.0.r),
                 constraints: BoxConstraints(
-                  maxWidth: MediaQuery.of(context).size.width * 0.7,
+                  maxWidth: 0.7.sw,
                 ),
                 decoration: BoxDecoration(
                   color: Color.fromRGBO(147, 112, 219, 0.7),
@@ -54,12 +57,12 @@ class MessageOut extends StatelessWidget {
             ],
           ),
           Padding(
-            padding: EdgeInsets.only(top: 2.0),
+            padding: EdgeInsets.only(top: 1.5.r),
             child: Text(
               message.time,
               textAlign: TextAlign.left,
               style: TextStyle(
-                fontSize: 10,
+                fontSize: 10.ssp,
                 color: Colors.white.withOpacity(0.6),
               ),
             ),

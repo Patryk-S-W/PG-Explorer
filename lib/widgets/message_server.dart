@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+
 import 'package:flutter_chat/models/message.dart';
+
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class MessageServer extends StatelessWidget {
   final Message message;
@@ -13,7 +16,7 @@ class MessageServer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Padding(
-        padding: EdgeInsets.all(9.5),
+        padding: EdgeInsets.all(8.3.r),
         child: Container(
           child: message.isGreeting
               ? Column(
@@ -22,13 +25,14 @@ class MessageServer extends StatelessWidget {
                       message.username + ' ' + message.message,
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 11,
+                          fontSize: 11.ssp,
                           color: Colors.white.withOpacity(0.7)),
                     ),
                     Text(
                       '--${message.userID}--',
                       style: TextStyle(
-                          fontSize: 9, color: Colors.white.withOpacity(0.5)),
+                          fontSize: 9.ssp,
+                          color: Colors.white.withOpacity(0.5)),
                     ),
                   ],
                 )

@@ -1,18 +1,21 @@
 import 'dart:io';
 
-import 'package:auto_route/auto_route.dart';
-import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+
+import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
+import 'package:auto_route/auto_route.dart';
+import 'package:connectivity/connectivity.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
+import 'package:top_snackbar_flutter/custom_snack_bar.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import 'package:flutter_chat/constants.dart';
 import 'package:flutter_chat/router/router.gr.dart';
 import 'package:flutter_chat/services/app_localizations.dart';
 import 'package:flutter_chat/widgets/custom_alert_dialog.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
-import 'package:top_snackbar_flutter/top_snack_bar.dart';
-import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 
 class LoginChatPage extends StatefulWidget {
   LoginChatPage({Key key}) : super(key: key);
@@ -119,7 +122,7 @@ class _LoginChatPageState extends State<LoginChatPage> {
         },
         child: Container(
           alignment: Alignment.center,
-          padding: EdgeInsets.symmetric(horizontal: 30.0),
+          padding: EdgeInsets.symmetric(horizontal: 30.0.r),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -130,7 +133,7 @@ class _LoginChatPageState extends State<LoginChatPage> {
                       style: GoogleFonts.rockSalt(
                         textStyle: TextStyle(
                           color: Colors.white,
-                          fontSize: 55,
+                          fontSize: 55.ssp,
                           fontWeight: FontWeight.bold,
                         ),
                       )),
@@ -161,14 +164,14 @@ class _LoginChatPageState extends State<LoginChatPage> {
                         ),
                         filled: true,
                         fillColor: Colors.white,
-                        contentPadding: EdgeInsets.all(20.0),
+                        contentPadding: EdgeInsets.all(15.0.r),
                       ),
                     ),
                     SizedBox(
-                      height: 35.0,
+                      height: 30.0.r,
                     ),
                     Container(
-                      width: MediaQuery.of(context).size.width,
+                      width: 1.sw,
                       child: OutlineButton(
                           borderSide: BorderSide(color: Colors.white),
                           child: Text(
@@ -206,7 +209,7 @@ class _LoginChatPageState extends State<LoginChatPage> {
         showTopSnackBar(
           context,
           Padding(
-              padding: EdgeInsets.only(top: 55.0),
+              padding: EdgeInsets.only(top: 55.0.r),
               child: CustomSnackBar.error(
                 message: AppLocalizations.of(context)
                     .translate("No_internet_connectivity"),

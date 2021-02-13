@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+
 import 'package:flutter_chat/models/message.dart';
+
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class MessageIn extends StatelessWidget {
   final Message message;
@@ -12,29 +15,29 @@ class MessageIn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(8.0),
+      padding: EdgeInsets.all(7.0.r),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: EdgeInsets.only(left: 8.0, bottom: 2.0),
+            padding: EdgeInsets.only(left: 6.0.r, bottom: 1.5.r),
             child: Row(
               children: [
                 Text(
                   message.username,
                   style: TextStyle(
-                    fontSize: 10.0,
+                    fontSize: 10.0.ssp,
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 SizedBox(
-                  width: 5.0,
+                  width: 6.0.r,
                 ),
                 Text(
                   '--${message.userID}--',
                   style: TextStyle(
-                    fontSize: 10,
+                    fontSize: 9.5.ssp,
                     color: Colors.white.withOpacity(0.6),
                   ),
                 )
@@ -46,9 +49,9 @@ class MessageIn extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Container(
-                padding: EdgeInsets.all(8.0),
+                padding: EdgeInsets.all(7.0.r),
                 constraints: BoxConstraints(
-                  maxWidth: MediaQuery.of(context).size.width * 0.7,
+                  maxWidth: 0.7.sw,
                 ),
                 decoration: BoxDecoration(
                     color: Color.fromRGBO(193, 173, 234, 0.7),
@@ -79,12 +82,12 @@ class MessageIn extends StatelessWidget {
             ],
           ),
           Padding(
-            padding: EdgeInsets.only(top: 2.0),
+            padding: EdgeInsets.only(top: 1.5.r),
             child: Text(
               message.time,
               textAlign: TextAlign.left,
               style: TextStyle(
-                fontSize: 10,
+                fontSize: 10.ssp,
                 color: Colors.white.withOpacity(0.6),
               ),
             ),

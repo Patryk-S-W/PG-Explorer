@@ -1,16 +1,19 @@
 import 'dart:async';
 import 'dart:math' as math;
-import 'package:connectivity/connectivity.dart';
-import 'package:flutter/material.dart';
-import 'package:auto_route/auto_route.dart';
-import 'package:flutter/scheduler.dart';
-import 'package:flutter_chat/providers/app_language.dart';
 
+import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+
+import 'package:provider/provider.dart';
+import 'package:auto_route/auto_route.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter_chat/router/router.gr.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import 'package:flutter_chat/providers/app_language.dart';
 import 'package:flutter_chat/services/app_localizations.dart';
 import 'package:flutter_chat/widgets/custom_alert_dialog.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
@@ -98,25 +101,22 @@ class _HomePageState extends State<HomePage>
     checkConnectivity();
     var appLanguage = Provider.of<AppLanguage>(context);
 
-    double _height = MediaQuery.of(context).size.height;
-    double _width = MediaQuery.of(context).size.width;
-
     return Scaffold(
       body: Stack(
         alignment: Alignment.center,
         children: [
           ClipPath(
             child: Container(
-              width: _width,
-              height: _height,
+              width: 1.sw,
+              height: 1.sh,
               color: Colors.black,
             ),
             clipper: TopTriangle(),
           ),
           ClipPath(
             child: Container(
-                width: _width,
-                height: _height,
+                width: 1.sw,
+                height: 1.sh,
                 color: Colors.white.withOpacity(0.85)),
             clipper: BottomTriangle(),
           ),
@@ -126,7 +126,7 @@ class _HomePageState extends State<HomePage>
                 flex: 3,
                 child: Center(
                   child: Container(
-                    width: 300,
+                    width: 260.0.r,
                     child: Image(image: AssetImage('assets/images/logo.png')),
                   ),
                 ),
@@ -137,7 +137,7 @@ class _HomePageState extends State<HomePage>
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
-                      height: 50.0,
+                      height: 45.0.r,
                       margin: EdgeInsets.all(10.0),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10.0),
@@ -167,7 +167,7 @@ class _HomePageState extends State<HomePage>
                           ),
                           child: Container(
                             constraints: BoxConstraints(
-                                maxWidth: 300.0, minHeight: 50.0),
+                                maxWidth: 260.0.r, minHeight: 45.0.r),
                             alignment: Alignment.center,
                             child: Text(
                               AppLocalizations.of(context).translate('PLAY'),
@@ -179,7 +179,7 @@ class _HomePageState extends State<HomePage>
                       ),
                     ),
                     Container(
-                      height: 50.0,
+                      height: 45.0.r,
                       margin: EdgeInsets.all(10),
                       child: RaisedButton(
                         onPressed: () {
@@ -201,7 +201,7 @@ class _HomePageState extends State<HomePage>
                           ),
                           child: Container(
                             constraints: BoxConstraints(
-                                maxWidth: 300.0, minHeight: 50.0),
+                                maxWidth: 260.0.r, minHeight: 45.0.r),
                             alignment: Alignment.center,
                             child: Text(
                               AppLocalizations.of(context).translate('CHAT'),

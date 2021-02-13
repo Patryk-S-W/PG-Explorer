@@ -3,16 +3,20 @@ import 'dart:io';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+
 import 'package:auto_route/auto_route.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:flutter_socket_io/socket_io_manager.dart';
+import 'package:flutter_socket_io/flutter_socket_io.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import 'package:flutter_chat/constants.dart';
 import 'package:flutter_chat/models/message.dart';
 import 'package:flutter_chat/widgets/message_in.dart';
 import 'package:flutter_chat/widgets/message_out.dart';
 import 'package:flutter_chat/widgets/message_server.dart';
-import 'package:flutter_socket_io/flutter_socket_io.dart';
-import 'package:flutter_socket_io/socket_io_manager.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:flutter_chat/services/app_localizations.dart';
 
 class ChatPage extends StatefulWidget {
   final String username;
@@ -32,7 +36,6 @@ class _ChatPageState extends State<ChatPage> {
   SocketIO _socketIO;
   String _time;
   String _userid;
-  String _connection_status;
   List<Message> _messages;
   Timer timer;
 
@@ -142,10 +145,10 @@ class _ChatPageState extends State<ChatPage> {
 
   Widget inputArea() {
     return Container(
-      height: 50,
+      height: 40.0.r,
       color: Colors.grey[900],
       child: Padding(
-          padding: EdgeInsets.only(left: 8.0),
+          padding: EdgeInsets.only(left: 6.0.r),
           child: TextField(
             maxLines: 20,
             controller: _textController,
@@ -225,7 +228,8 @@ class _ChatPageState extends State<ChatPage> {
                 },
               ),
               border: InputBorder.none,
-              hintText: 'Send a message...',
+              hintText:
+                  AppLocalizations.of(context).translate('Send_a_message'),
             ),
           )),
     );
@@ -252,11 +256,7 @@ class _ChatPageState extends State<ChatPage> {
           leading: IconButton(
             icon: Icon(Icons.arrow_back_ios),
             onPressed: () {
-              print('==> $_connection_status 1');
               _socketIO.unSubscribesAll();
-              print('==> $_connection_status 13');
-              _socketIO.disconnect();
-              print('==> $_connection_status 132');
               Future.delayed(Duration(milliseconds: 1),
                   () => ExtendedNavigator.root.pop());
             },
