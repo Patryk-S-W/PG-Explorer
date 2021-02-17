@@ -27,39 +27,48 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-        providers: [
-          StreamProvider<ConnectivityResult>(
-            create: (_) =>
-                ConnectivityService().connectionStatusController.stream,
-          ),
-          ChangeNotifierProvider<AppLanguage>(create: (_) => appLanguage)
-        ],
-        child: ScreenUtilInit(
-          allowFontScaling: true,
-          builder: () => Consumer<AppLanguage>(
-            builder: (context, model, child) {
-              return MaterialApp(
-                debugShowCheckedModeBanner: false,
-                home: Container(),
-                builder: ExtendedNavigator.builder(
-                  router: rt.Router(),
-                  initialRoute: rt.Routes.homePage,
-                  builder: (_, navigator) =>
-                      Theme(data: ThemeData.dark(), child: navigator),
+      providers: [
+        StreamProvider<ConnectivityResult>(
+          create: (_) =>
+              ConnectivityService().connectionStatusController.stream,
+        ),
+        ChangeNotifierProvider<AppLanguage>(create: (_) => appLanguage)
+      ],
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          return OrientationBuilder(
+            builder: (builder, orientation) {
+              return ScreenUtilInit(
+                allowFontScaling: true,
+                builder: () => Consumer<AppLanguage>(
+                  builder: (context, model, child) {
+                    return MaterialApp(
+                      debugShowCheckedModeBanner: false,
+                      home: Container(),
+                      builder: ExtendedNavigator.builder(
+                        router: rt.Router(),
+                        initialRoute: rt.Routes.homePage,
+                        builder: (_, navigator) =>
+                            Theme(data: ThemeData.dark(), child: navigator),
+                      ),
+                      locale: model.appLocal,
+                      supportedLocales: [
+                        Locale('en', 'US'),
+                        Locale('pl', 'PL'),
+                      ],
+                      localizationsDelegates: [
+                        AppLocalizations.delegate,
+                        GlobalMaterialLocalizations.delegate,
+                        GlobalWidgetsLocalizations.delegate,
+                      ],
+                    );
+                  },
                 ),
-                locale: model.appLocal,
-                supportedLocales: [
-                  Locale('en', 'US'),
-                  Locale('pl', 'PL'),
-                ],
-                localizationsDelegates: [
-                  AppLocalizations.delegate,
-                  GlobalMaterialLocalizations.delegate,
-                  GlobalWidgetsLocalizations.delegate,
-                ],
               );
             },
-          ),
-        ));
+          );
+        },
+      ),
+    );
   }
 }

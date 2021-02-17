@@ -53,7 +53,6 @@ class _ChatPageState extends State<ChatPage> {
     _socketIO.init();
 
     _socketIO.subscribe('greeting', (jsonData) {
-      print('==> $jsonData');
       Message data = Message.fromJson(json.decode(jsonData.toString()));
       this.setState(() => _messages.add(data));
       scrollDown();
@@ -145,7 +144,7 @@ class _ChatPageState extends State<ChatPage> {
 
   Widget inputArea() {
     return Container(
-      height: 40.0.r,
+      height: 45.0,
       color: Colors.grey[900],
       child: Padding(
           padding: EdgeInsets.only(left: 6.0.r),

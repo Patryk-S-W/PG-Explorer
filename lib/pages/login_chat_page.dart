@@ -141,48 +141,53 @@ class _LoginChatPageState extends State<LoginChatPage> {
               ),
               Expanded(
                 flex: 2,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    TextField(
-                      controller: _usernameController,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(color: Colors.black),
-                      decoration: InputDecoration(
-                        hintText:
-                            AppLocalizations.of(context).translate('username'),
-                        hintStyle: TextStyle(color: Colors.grey),
-                        errorText: _validate
-                            ? null
-                            : AppLocalizations.of(context)
-                                .translate('Enter_username'),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(5.0),
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Container(
+                        width: 250.w,
+                        child: TextField(
+                          controller: _usernameController,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: Colors.black),
+                          decoration: InputDecoration(
+                            hintText: AppLocalizations.of(context)
+                                .translate('username'),
+                            hintStyle: TextStyle(color: Colors.grey),
+                            errorText: _validate
+                                ? null
+                                : AppLocalizations.of(context)
+                                    .translate('Enter_username'),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(5.0),
+                              ),
+                            ),
+                            filled: true,
+                            fillColor: Colors.white,
+                            contentPadding: EdgeInsets.all(15.0.r),
                           ),
                         ),
-                        filled: true,
-                        fillColor: Colors.white,
-                        contentPadding: EdgeInsets.all(15.0.r),
                       ),
-                    ),
-                    SizedBox(
-                      height: 30.0.r,
-                    ),
-                    Container(
-                      width: 1.sw,
-                      child: OutlineButton(
-                          borderSide: BorderSide(color: Colors.white),
-                          child: Text(
-                            AppLocalizations.of(context).translate('JOIN'),
-                            style: TextStyle(fontWeight: FontWeight.w400),
-                          ),
-                          onPressed: () {
-                            _openChat();
-                          }),
-                    ),
-                  ],
+                      SizedBox(
+                        height: 30.0.r,
+                      ),
+                      Container(
+                        width: 0.4.sw,
+                        child: OutlineButton(
+                            borderSide: BorderSide(color: Colors.white),
+                            child: Text(
+                              AppLocalizations.of(context).translate('JOIN'),
+                              style: TextStyle(fontWeight: FontWeight.w400),
+                            ),
+                            onPressed: () {
+                              _openChat();
+                            }),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],

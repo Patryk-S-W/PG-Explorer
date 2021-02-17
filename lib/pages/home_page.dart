@@ -9,11 +9,14 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter_chat/router/router.gr.dart';
+import 'package:auto_orientation/auto_orientation.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:flutter_chat/providers/app_language.dart';
+import 'package:flutter_chat/widgets/gradient_button.dart';
 import 'package:flutter_chat/services/app_localizations.dart';
 import 'package:flutter_chat/widgets/custom_alert_dialog.dart';
+import 'package:flutter_chat/widgets/triangle_background.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
@@ -99,27 +102,14 @@ class _HomePageState extends State<HomePage>
   @override
   Widget build(BuildContext context) {
     checkConnectivity();
-    var appLanguage = Provider.of<AppLanguage>(context);
-
+    AppLanguage appLanguage = Provider.of<AppLanguage>(context);
     return Scaffold(
-      body: Stack(
+        body: OrientationBuilder(
+      builder: (context, orientation) => Stack(
         alignment: Alignment.center,
         children: [
-          ClipPath(
-            child: Container(
-              width: 1.sw,
-              height: 1.sh,
-              color: Colors.black,
-            ),
-            clipper: TopTriangle(),
-          ),
-          ClipPath(
-            child: Container(
-                width: 1.sw,
-                height: 1.sh,
-                color: Colors.white.withOpacity(0.85)),
-            clipper: BottomTriangle(),
-          ),
+          TriangleBackground(
+              color1: Colors.black, color2: Colors.white.withOpacity(0.85)),
           Column(
             children: [
               Expanded(
@@ -136,9 +126,14 @@ class _HomePageState extends State<HomePage>
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Container(
-                      height: 45.0.r,
-                      margin: EdgeInsets.all(10.0),
+                    GradientButton(
+                      child: Text(
+                        AppLocalizations.of(context).translate('PLAY'),
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      transform: GradientRotation(math.pi / 4),
+                      colors: [Colors.red, Colors.black],
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10.0),
                           boxShadow: [
@@ -148,69 +143,21 @@ class _HomePageState extends State<HomePage>
                               spreadRadius: _animation.value,
                             )
                           ]),
-                      child: RaisedButton(
-                        onPressed: () {
-                          // todo
-                        },
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0)),
-                        padding: EdgeInsets.all(0.0),
-                        child: Ink(
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [Colors.red, Colors.black],
-                              begin: Alignment.centerLeft,
-                              end: Alignment.centerRight,
-                              transform: GradientRotation(math.pi / 4),
-                            ),
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                          child: Container(
-                            constraints: BoxConstraints(
-                                maxWidth: 260.0.r, minHeight: 45.0.r),
-                            alignment: Alignment.center,
-                            child: Text(
-                              AppLocalizations.of(context).translate('PLAY'),
-                              textAlign: TextAlign.center,
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-                        ),
-                      ),
+                      onPressed: () {
+                        // todo
+                      },
                     ),
-                    Container(
-                      height: 45.0.r,
-                      margin: EdgeInsets.all(10),
-                      child: RaisedButton(
-                        onPressed: () {
-                          ExtendedNavigator.root.push(Routes.loginChatPage);
-                        },
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        padding: EdgeInsets.all(0.0),
-                        child: Ink(
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [Colors.white, Colors.black],
-                              begin: Alignment.centerLeft,
-                              end: Alignment.centerRight,
-                              transform: GradientRotation(math.pi / 4),
-                            ),
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                          child: Container(
-                            constraints: BoxConstraints(
-                                maxWidth: 260.0.r, minHeight: 45.0.r),
-                            alignment: Alignment.center,
-                            child: Text(
-                              AppLocalizations.of(context).translate('CHAT'),
-                              textAlign: TextAlign.center,
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-                        ),
+                    GradientButton(
+                      child: Text(
+                        AppLocalizations.of(context).translate('CHAT'),
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.white),
                       ),
+                      transform: GradientRotation(math.pi / 4),
+                      colors: [Colors.white, Colors.black],
+                      onPressed: () {
+                        ExtendedNavigator.root.push(Routes.loginChatPage);
+                      },
                     ),
                   ],
                 ),
@@ -220,6 +167,7 @@ class _HomePageState extends State<HomePage>
           Align(
             alignment: Alignment.bottomRight,
             child: PopupMenuButton<String>(
+              padding: EdgeInsets.all(17.r),
               icon: Icon(Icons.translate_outlined, color: Colors.black),
               onSelected: (String value) {
                 switch (value) {
@@ -242,38 +190,27 @@ class _HomePageState extends State<HomePage>
                     .toList();
               },
             ),
+          ),
+          Align(
+            alignment: Alignment.bottomLeft,
+            child: IconButton(
+              padding: EdgeInsets.all(17.r),
+              icon: Icon(
+                Icons.screen_rotation_outlined,
+                color: orientation == Orientation.portrait
+                    ? Colors.black
+                    : Colors.white,
+              ),
+              onPressed: () {
+                print(orientation);
+                orientation == Orientation.portrait
+                    ? AutoOrientation.landscapeAutoMode()
+                    : AutoOrientation.portraitAutoMode();
+              },
+            ),
           )
         ],
       ),
-    );
+    ));
   }
-}
-
-class TopTriangle extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    Path path = Path();
-    path.lineTo(0.0, size.height);
-    path.lineTo(size.width, 0.0);
-    path.close();
-    return path;
-  }
-
-  @override
-  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
-}
-
-class BottomTriangle extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    Path path = Path();
-    path.moveTo(size.width, 0.0);
-    path.lineTo(0.0, size.height);
-    path.lineTo(size.width, size.height);
-    path.close();
-    return path;
-  }
-
-  @override
-  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
 }
