@@ -144,7 +144,9 @@ class _HomePageState extends State<HomePage>
                             )
                           ]),
                       onPressed: () {
-                        // todo
+                        ExtendedNavigator.root.push(Routes.gamePage,
+                            arguments:
+                                GamePageArguments(orientation: orientation));
                       },
                     ),
                     GradientButton(
@@ -202,7 +204,6 @@ class _HomePageState extends State<HomePage>
                     : Colors.white,
               ),
               onPressed: () {
-                print(orientation);
                 orientation == Orientation.portrait
                     ? AutoOrientation.landscapeAutoMode()
                     : AutoOrientation.portraitAutoMode();
