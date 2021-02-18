@@ -9,21 +9,28 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
+import '../models/note.dart';
 import '../pages/chat_page.dart';
 import '../pages/game_page.dart';
 import '../pages/home_page.dart';
 import '../pages/login_chat_page.dart';
+import '../pages/note_details_page.dart';
+import '../pages/notes_page.dart';
 
 class Routes {
   static const String homePage = '/';
   static const String loginChatPage = '/login-chat-page';
   static const String chatPage = '/chat-page';
   static const String gamePage = '/game-page';
+  static const String notesPage = '/notes-page';
+  static const String noteDetailsPage = '/note-details-page';
   static const all = <String>{
     homePage,
     loginChatPage,
     chatPage,
     gamePage,
+    notesPage,
+    noteDetailsPage,
   };
 }
 
@@ -35,6 +42,8 @@ class Router extends RouterBase {
     RouteDef(Routes.loginChatPage, page: LoginChatPage),
     RouteDef(Routes.chatPage, page: ChatPage),
     RouteDef(Routes.gamePage, page: GamePage),
+    RouteDef(Routes.notesPage, page: NotesPage),
+    RouteDef(Routes.noteDetailsPage, page: NoteDetailsPage),
   ];
   @override
   Map<Type, AutoRouteFactory> get pagesMap => _pagesMap;
@@ -77,6 +86,22 @@ class Router extends RouterBase {
         settings: data,
       );
     },
+    NotesPage: (data) {
+      return buildAdaptivePageRoute<dynamic>(
+        builder: (context) => NotesPage(),
+        settings: data,
+      );
+    },
+    NoteDetailsPage: (data) {
+      final args = data.getArgs<NoteDetailsPageArguments>(nullOk: false);
+      return buildAdaptivePageRoute<dynamic>(
+        builder: (context) => NoteDetailsPage(
+          args.note,
+          args.appBarTitle,
+        ),
+        settings: data,
+      );
+    },
   };
 }
 
@@ -108,4 +133,11 @@ class GamePageArguments {
   final Key key;
   final Orientation orientation;
   GamePageArguments({this.key, @required this.orientation});
+}
+
+/// NoteDetailsPage arguments holder class
+class NoteDetailsPageArguments {
+  final Note note;
+  final String appBarTitle;
+  NoteDetailsPageArguments({@required this.note, @required this.appBarTitle});
 }

@@ -186,6 +186,21 @@ class _LoginChatPageState extends State<LoginChatPage> {
                               _openChat();
                             }),
                       ),
+                      SizedBox(
+                        height: 5.0.r,
+                      ),
+                      Container(
+                        width: 0.4.sw,
+                        child: OutlineButton(
+                            borderSide: BorderSide(color: Colors.red),
+                            child: Text(
+                              AppLocalizations.of(context).translate('NOTES'),
+                              style: TextStyle(fontWeight: FontWeight.w400),
+                            ),
+                            onPressed: () {
+                              ExtendedNavigator.root.push(Routes.notesPage);
+                            }),
+                      ),
                     ],
                   ),
                 ),
